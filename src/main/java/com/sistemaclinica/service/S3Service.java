@@ -33,9 +33,11 @@ public class S3Service {
     @Value("${aws.bucketName}")
     private String bucketName;*/
     
-    final String AWS_ACCESS_KEY = "AKIAZI2LF5ZMTZ6JFWTK";
-    final String AWS_SECRET_KEY = "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";
+    final String AWS_ACCESS_KEY = System.getenv("AWS_ACCESS_KEY_ID");
+    final String AWS_SECRET_KEY = System.getenv("AWS_SECRET_ACCESS_KEY");
     final String BUCKET_NAME = "clinicaimages";
+
+    
     
     //private AmazonS3 s3Client;
     
