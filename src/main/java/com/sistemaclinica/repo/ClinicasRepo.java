@@ -13,5 +13,7 @@ public interface ClinicasRepo extends JpaRepository<Clinica, Long> {
 	
 	Optional<Clinica> findByAccessKey(String accessKey);
 
+	boolean existsByCnpjclinica(String cnpjclinica);
+
 	
 }

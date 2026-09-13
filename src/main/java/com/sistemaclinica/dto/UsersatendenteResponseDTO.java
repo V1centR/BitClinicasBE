@@ -18,9 +18,9 @@ public class UsersatendenteResponseDTO extends UsuarioBaseDTO {
         this.setClinicaNome(user.getClinica() != null ? user.getClinica().getNomeclinica() : null);
         this.setClinicaKey(user.getClinica() != null ? user.getClinica().getAccessKey() : null);
         this.setFuncaoNome(user.getFuncaoclinica() != null ? user.getFuncaoclinica().getNomefuncao() : null);
-        this.setFuncaoID(user.getFuncaoclinica() != null ? user.getFuncaoclinica().getId() : 0);
+        this.setFuncaoID(user.getFuncaoclinica() != null ? user.getFuncaoclinica().getLevel() : 0);
         this.setObservacoes(user.getObservacoes());
-        this.setTipo("ATENDENTE");
+        //this.setTipo(user.getFuncaoclinica().getLevel());
     }
 
 }

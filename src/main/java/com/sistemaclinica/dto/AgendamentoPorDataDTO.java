@@ -16,7 +16,7 @@ public class AgendamentoPorDataDTO {
 	
 	private String nomecompleto;
 	private String observacoes;
-	//private String cpf;
+	private String cpf;
 	private String sexo;
 	private String telefone;
 	private String email;
@@ -34,7 +34,7 @@ public class AgendamentoPorDataDTO {
 		
 		this.nomecompleto = agendaData.getPacienteBean() != null ? agendaData.getPacienteBean().getNomecompleto() : null;
 		this.observacoes = agendaData.getObservacoes();
-		//this.cpf = agendaData.getCpf();
+		this.cpf = agendaData.getPacienteBean() != null ? agendaData.getPacienteBean().getCpf() : null;
 		this.sexo = agendaData.getSexo();
 		this.telefone = agendaData.getTelefone();
 		this.email = agendaData.getPacienteBean() != null ? agendaData.getPacienteBean().getEmail() : null;

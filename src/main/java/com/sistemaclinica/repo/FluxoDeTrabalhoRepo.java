@@ -11,8 +11,7 @@ import com.sistemaclinica.entity.Fluxotrabalho;
 @Repository
 public interface FluxoDeTrabalhoRepo extends JpaRepository<Fluxotrabalho, Integer> {
 	
-	List<Fluxotrabalho> findByClinica_AccessKeyAndDataRegistroBetween(String accessKey, LocalDateTime dataInicio, LocalDateTime dataFim);
+	List<Fluxotrabalho> findTop17ByClinica_AccessKeyAndDataRegistroBetweenOrderByDataRegistro(String accessKey, LocalDateTime dataInicio, LocalDateTime dataFim);
 
 	List<Fluxotrabalho> findByClinica_AccessKey(String accessKey);
-
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -52,28 +53,33 @@ public class UsersService {
 	@Autowired
 	private MedicoRepo medicosRepo;
 	
-	public UsersatendenteResponseDTO getUserLogin(LoginRequest userData) {
+	public UsuarioBaseDTO getUserLogin(LoginRequest userData) {
 	    
-	    //STATUS 1 = active
-	    Usersatendente usuario = userRepo.findByEmailAndDeletedIsNullAndStatus(userData.getEmail(),1)
-	        .orElseThrow(() -> new RuntimeException("no credentials")); // Mensagem genérica
-	    
-	    
-	    System.out.println("USER FOUND::: " + usuario.getNome());
-	    
-	    if (!userData.getEncryptedpass().equals(usuario.getPassword())) {
-	        throw new RuntimeException("no credentials");
+	    // 1. Try to find in Usersatendente (atendentes/admins)
+	    Optional<Usersatendente> optUsuario = userRepo.findByEmailAndDeletedIsNullAndStatus(userData.getEmail(), 1);
+	    if (optUsuario.isPresent()) {
+	        Usersatendente usuario = optUsuario.get();
+	        System.out.println("USER FOUND::: " + usuario.getNome());
+	        if (!userData.getEncryptedpass().equals(usuario.getPassword())) {
+	            throw new RuntimeException("no credentials");
+	        }
+	        log.info("Login bem-sucedido para atendente/admin: {}", usuario.getEmail());
+	        return new UsersatendenteResponseDTO(usuario);
 	    }
 	    
-	    // 4. Log de auditoria (opcional, mas recomendado)
-	    log.info("Login bem-sucedido para usuário: {}", usuario.getEmail());
+	    // 2. Try to find in Medico
+	    Optional<Medico> optMedico = medicosRepo.findByEmailAndDeletedIsNullAndStatus(userData.getEmail(), 1);
+	    if (optMedico.isPresent()) {
+	        Medico medico = optMedico.get();
+	        System.out.println("MEDICO FOUND::: " + medico.getNome());
+	        if (!userData.getEncryptedpass().equals(medico.getPwdu59k7auvwyu())) {
+	            throw new RuntimeException("no credentials");
+	        }
+	        log.info("Login bem-sucedido para médico: {}", medico.getEmail());
+	        return new MedicoResponseDTO(medico);
+	    }
 	    
-	    // 5. Atualizar último login
-	   // usuario.setUltimoLogin(LocalDateTime.now());
-	   //userRepo.save(usuario);
-	    
-	    // 6. Retornar DTO seguro (sem dados sensíveis)
-	    return new UsersatendenteResponseDTO(usuario);
+	    throw new RuntimeException("no credentials");
 	}
 	
 	public boolean deleteUser(String clinicaKey, String mailUser) {

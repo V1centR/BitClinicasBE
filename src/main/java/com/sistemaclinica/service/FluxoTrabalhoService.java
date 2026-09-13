@@ -32,7 +32,7 @@ public class FluxoTrabalhoService {
         LocalDateTime startOfDay = data.atStartOfDay();
         LocalDateTime endOfDay = data.atTime(23, 59, 59, 999999999);
         
-        List<Fluxotrabalho> resultados = repo.findByClinica_AccessKeyAndDataRegistroBetween(accessKey, startOfDay, endOfDay);
+        List<Fluxotrabalho> resultados = repo.findTop17ByClinica_AccessKeyAndDataRegistroBetweenOrderByDataRegistro(accessKey, startOfDay, endOfDay);
         
         if (resultados.isEmpty()) {
             return new ArrayList<>(); // Retorna lista vazia em vez de erro

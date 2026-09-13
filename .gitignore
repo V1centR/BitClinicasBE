@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 
 /src/main/java/com/sistemaclinica/service/S3Service.java
+**/com/sistemaclinica/service/S3Service.java
 
 ### STS ###
 .apt_generated
@@ -33,3 +34,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+###Sec###
+*.pem
+*.pub
+*.key

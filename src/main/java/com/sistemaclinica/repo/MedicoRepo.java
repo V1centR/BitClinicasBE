@@ -1,6 +1,7 @@
 package com.sistemaclinica.repo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +22,6 @@ public interface MedicoRepo extends JpaRepository<Medico, Integer> {
 
     Medico findByEmailAndClinicaBean_AccessKey(String emailMedico, String clinicaKey);
 	
-	//existsByEmailAndClinica_AccessKeyAndDeletedIsNull
+	Optional<Medico> findByEmailAndDeletedIsNullAndStatus(String email, Integer status);
 	
 }

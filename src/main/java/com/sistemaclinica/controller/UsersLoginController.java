@@ -1,5 +1,6 @@
 package com.sistemaclinica.controller;
 
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sistemaclinica.dto.UsersatendenteResponseDTO;
+import com.sistemaclinica.dto.UsuarioBaseDTO;
 import com.sistemaclinica.request.LoginRequest;
 import com.sistemaclinica.service.UsersService;
 
@@ -35,18 +36,18 @@ public class UsersLoginController {
 			System.out.println("ACCEPTED VALIDATION ######### ");
 			
 			try {
-				UsersatendenteResponseDTO user = userService.getUserLogin(request);
+				UsuarioBaseDTO user = userService.getUserLogin(request);
 				return ResponseEntity.ok(user);
 				
 			} catch (Exception e) {
 			
-				 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-		                    .body(e.getMessage());
+				 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+		                    .body(Map.of("message", "E-mail ou senha incorretos"));
 			}
 		
 		}
 		
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Chave de acesso inválida"));
 	}
 	
 

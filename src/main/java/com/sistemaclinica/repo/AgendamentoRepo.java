@@ -23,11 +23,11 @@ public interface AgendamentoRepo extends JpaRepository<Agendamento, Integer> {
     
     @Query(value = """
         WITH RECURSIVE todos_horarios AS (
-            SELECT TIME('07:00:00') as hora
-            UNION ALL
-            SELECT ADDTIME(hora, '00:30:00')
-            FROM todos_horarios
-            WHERE hora < TIME('19:00:00')
+        SELECT TIME('07:00:00') as hora
+        UNION ALL
+        SELECT ADDTIME(hora, '00:30:00')
+        FROM todos_horarios
+        WHERE hora < TIME('19:00:00')
         )
         SELECT 
             TIME_FORMAT(th.hora, '%H:%i') as label,
@@ -38,7 +38,10 @@ public interface AgendamentoRepo extends JpaRepository<Agendamento, Integer> {
             END as ocupado,
             a.observacoes,
             p.nomecompleto as paciente_nome,
+            p.cpf as cpf,
+            p.telefone as telefone,
             a.status,
+            u.nome as operadoratendente,          -- ← Nome do operador
             a.id as agendamento_id
         FROM todos_horarios th
         LEFT JOIN agendamentos a 
@@ -48,6 +51,8 @@ public interface AgendamentoRepo extends JpaRepository<Agendamento, Integer> {
             AND a.status NOT IN ('cancelado', 'remarcado')
         LEFT JOIN pacientes p 
             ON a.paciente = p.id
+        LEFT JOIN usersatendentes u              -- ← JOIN com a tabela de operadores
+            ON a.operadoratendente = u.id
         ORDER BY th.hora
         """, nativeQuery = true)
         List<HorarioDisponivelProjection> findHorariosDisponiveisPorMedicoEData(
@@ -61,17 +66,12 @@ public interface AgendamentoRepo extends JpaRepository<Agendamento, Integer> {
 	        String getObservacoes();
             String getPacienteNome();
             String getStatus();
+            String getOperadorAtendente();
+            String getCpf();
+            String getTelefone();
             Long getAgendamentoId();
 	        Integer getOcupado();   // true = ocupado, false = disponível
 	    }
-    
-    
-    
-    
-    
-    
-    
-    
     
     //Método 2: Buscar agendamentos de hoje CORRIGIDO
     @Query("SELECT a FROM Agendamento a WHERE " +

@@ -110,8 +110,7 @@ public class AgendamentoGravarService {
                 Agendamento agendamento = new Agendamento();
                 agendamento.setPacienteBean(pacienteFound);
                 agendamento.setSexo(request.getSexo());
-                // agendamento.setCpf(request.getPacienteDoc().replace(".", "").replace("-",
-                // ""));
+                //agendamento.setCpf(request.getPacienteCPF().replace(".", "").replace("-", ""));
                 agendamento.setTelefone(request.getPacienteTel());
                 agendamento.setMedicoBean(medico);
                 agendamento.setDataAgendamento(dataAgendamentoUTC);

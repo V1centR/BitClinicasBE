@@ -49,6 +49,8 @@ public class Agendamento implements Serializable {
 
 	private String telefone;
 
+	private String cpf;
+
 	//bi-directional many-to-one association to Usersatendente
 	@ManyToOne
 	@JoinColumn(name="operadoratendente")

@@ -20,7 +20,7 @@ public class PacientesService {
 		Paciente newPaciente = new Paciente();
 		
 		newPaciente.setNomecompleto(request.getNomecompleto());
-		newPaciente.setCpf(request.getCpf().replace(".", "").replace("-", ""));
+		newPaciente.setCpf(request.getCpf());
 		newPaciente.setCep(request.getCep());
 		newPaciente.setTelefone(request.getTelefone());
 		newPaciente.setEndereco(request.getEndereco());
