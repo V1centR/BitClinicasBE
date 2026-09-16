@@ -53,8 +53,6 @@ public class UsersService {
 	@Autowired
 	private UserAtendenteRepo userRepo;
 
-	//private PasswordEncoder passwordEncoder;
-
 	@Autowired
     private PasswordEncoder passwordEncoder;
 	
@@ -68,7 +66,7 @@ public class UsersService {
 	        Usersatendente usuario = optUsuario.get();
 	        System.out.println("USER FOUND::: " + usuario.getNome());
 
-	        if (!passwordEncoder.matches(userData.getEncryptedpass(), usuario.getPassword())) {
+	        if (!passwordEncoder.matches(userData.encryptedPass(), usuario.getPassword())) {
 	            throw new RuntimeException("no credentials");
 	        }
 	        log.info("Login bem-sucedido para atendente/admin: {}", usuario.getEmail());
@@ -76,7 +74,6 @@ public class UsersService {
 	    }
 
 		throw new RuntimeException("no credentials");
-		
 		
 	}
 
@@ -229,7 +226,7 @@ public class UsersService {
 	            userData.setObservacoes(request.getObservacoes());
 	            
 	            // Campos específicos de criação
-	            userData.setPassword(encryptPassword(senhaTemporaria));
+	            userData.setPassword(encryptPassword("123"));
 	            userData.setStatus(1);  // Ativo por padrão
 	            userData.setFirstlogin(1);
 	            

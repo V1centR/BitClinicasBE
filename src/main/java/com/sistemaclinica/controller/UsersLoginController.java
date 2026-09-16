@@ -34,9 +34,8 @@ public class UsersLoginController {
 
 	private BCryptPasswordEncoder passwordEncoder;
 
+	@Autowired 
 	private JwtEncoder jwtEncoder;
-
-
 
 	@PostMapping("/loginjwt")
 	public ResponseEntity<LoginResponse> execLoginJWT(@RequestBody LoginRequestJWT request) {

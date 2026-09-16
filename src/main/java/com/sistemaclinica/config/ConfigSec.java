@@ -66,7 +66,7 @@ public class ConfigSec {
             .csrf(csrf -> csrf.disable()) // desabilitar em producao
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST,"/api/MxxFYRGkkh84e98mR6fp9pGY/registerusuario").permitAll()
-                .requestMatchers(HttpMethod.POST,"/login").permitAll()
+                .requestMatchers(HttpMethod.POST,"/api/cTakHhTPYtMsXUgNDGhP/loginjwt").permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))
