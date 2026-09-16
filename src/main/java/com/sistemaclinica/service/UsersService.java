@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sistemaclinica.dto.MedicoResponseDTO;
@@ -27,6 +29,7 @@ import com.sistemaclinica.repo.MedicoRepo;
 import com.sistemaclinica.repo.PermissoesRepo;
 import com.sistemaclinica.repo.UserAtendenteRepo;
 import com.sistemaclinica.request.LoginRequest;
+import com.sistemaclinica.request.LoginRequestJWT;
 import com.sistemaclinica.request.NovoUsuarioRequest;
 
 @Service
@@ -49,10 +52,34 @@ public class UsersService {
 	
 	@Autowired
 	private UserAtendenteRepo userRepo;
+
+	//private PasswordEncoder passwordEncoder;
+
+	@Autowired
+    private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private MedicoRepo medicosRepo;
-	
+
+	public UsuarioBaseDTO getUserLoginJWT(LoginRequestJWT userData) {
+		
+		Optional<Usersatendente> optUsuario = userRepo.findByEmailAndDeletedIsNullAndStatus(userData.mailUser(), 1);
+	    if (optUsuario.isPresent()) {
+	        Usersatendente usuario = optUsuario.get();
+	        System.out.println("USER FOUND::: " + usuario.getNome());
+
+	        if (!passwordEncoder.matches(userData.getEncryptedpass(), usuario.getPassword())) {
+	            throw new RuntimeException("no credentials");
+	        }
+	        log.info("Login bem-sucedido para atendente/admin: {}", usuario.getEmail());
+	        return new UsersatendenteResponseDTO(usuario);
+	    }
+
+		throw new RuntimeException("no credentials");
+		
+		
+	}
+
 	public UsuarioBaseDTO getUserLogin(LoginRequest userData) {
 	    
 	    // 1. Try to find in Usersatendente (atendentes/admins)
@@ -202,7 +229,7 @@ public class UsersService {
 	            userData.setObservacoes(request.getObservacoes());
 	            
 	            // Campos específicos de criação
-	            userData.setPassword(senhaTemporaria);
+	            userData.setPassword(encryptPassword(senhaTemporaria));
 	            userData.setStatus(1);  // Ativo por padrão
 	            userData.setFirstlogin(1);
 	            
@@ -251,6 +278,10 @@ public class UsersService {
 	        // Usuário normal
 	        return String.format("%dgenericIcon%s.png", numero, sufixo);
 	    }
+	}
+
+	public String encryptPassword(String password) {
+	    return passwordEncoder.encode(password);
 	}
 	
 	public String gerarSenhaAleatoria() {
