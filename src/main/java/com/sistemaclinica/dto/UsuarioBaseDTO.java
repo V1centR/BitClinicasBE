@@ -14,6 +14,7 @@ public abstract class UsuarioBaseDTO {
     private String clinicaKey;
     private String funcaoNome;
     private int funcaoID;
+	private String role;
     private String avatar;
     private int status;
     private String observacoes;

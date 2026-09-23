@@ -45,8 +45,9 @@ public class UsersLoginController {
 				var now = Instant.now();
 				var expiresIn = 300L;
 
-				var claims = JwtClaimsSet.builder().issuer("BitClinicas 2026")
+				var claims = JwtClaimsSet.builder().issuer("BitClinicas SpecsBR 2027")
 				.subject(user.getEmail())
+				.claim("role", user.getFuncaoID()) //add param
 				.issuedAt(now)
 				.expiresAt(now.plusSeconds(expiresIn))
 				.build();

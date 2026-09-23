@@ -67,6 +67,7 @@ public class ConfigSec {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST,"/api/MxxFYRGkkh84e98mR6fp9pGY/registerusuario").permitAll()
                 .requestMatchers(HttpMethod.POST,"/api/cTakHhTPYtMsXUgNDGhP/loginjwt").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/usuarios/registerusuario").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))
