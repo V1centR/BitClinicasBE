@@ -7,7 +7,8 @@ import lombok.Data;
 @Data
 public class UsersatendenteResponseDTO extends UsuarioBaseDTO {
 	
-	public UsersatendenteResponseDTO(Usersatendente user) {
+	public UsersatendenteResponseDTO(Usersatendente user, String role) {
+		this.setRole(role == "" ? "ROLE_GUEST" : role);
         this.setId(user.getId());
         this.setNome(user.getNome());
         this.setEmail(user.getEmail());

@@ -70,7 +70,17 @@ public class UsersService {
 	            throw new RuntimeException("no credentials");
 	        }
 	        log.info("Login bem-sucedido para atendente/admin: {}", usuario.getEmail());
-	        return new UsersatendenteResponseDTO(usuario);
+
+
+			String nomeFuncao = usuario.getFuncaoclinica().getNomefuncao();
+
+			String role = "ROLE_" + nomeFuncao.toUpperCase()
+        .replace(" ", "_")
+        .replace("Á", "A")
+        .replace("Ã", "A")
+        .replace("Ç", "C");
+
+	        return new UsersatendenteResponseDTO(usuario,role);
 	    }
 
 		throw new RuntimeException("no credentials");
@@ -88,7 +98,7 @@ public class UsersService {
 	            throw new RuntimeException("no credentials");
 	        }
 	        log.info("Login bem-sucedido para atendente/admin: {}", usuario.getEmail());
-	        return new UsersatendenteResponseDTO(usuario);
+	        return new UsersatendenteResponseDTO(usuario,"");
 	    }
 	    
 	    // 2. Try to find in Medico
@@ -146,7 +156,7 @@ public class UsersService {
 	            // Busca atendentes
 	            List<Usersatendente> atendentes = userRepo.findByClinica_AccessKeyAndDeletedIsNull(clinicaKey);
 	            for (Usersatendente atendente : atendentes) {
-	                todosUsuarios.add(new UsersatendenteResponseDTO(atendente));
+	                todosUsuarios.add(new UsersatendenteResponseDTO(atendente,""));
 	            }
 	            
 	            // Busca médicos
@@ -241,7 +251,7 @@ public class UsersService {
 	        //Save on database
 	        Usersatendente savedUser = userRepo.save(userData);
 	        
-	        return new UsersatendenteResponseDTO(savedUser);
+	        return new UsersatendenteResponseDTO(savedUser,"update");
 
 	    } catch (ErrorRegisterUserException e) {
 	        log.error("❌ Email duplicado: {}", e.getMessage());

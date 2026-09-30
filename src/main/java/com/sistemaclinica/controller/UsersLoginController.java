@@ -47,14 +47,14 @@ public class UsersLoginController {
 
 				var claims = JwtClaimsSet.builder().issuer("BitClinicas SpecsBR 2027")
 				.subject(user.getEmail())
-				.claim("role", user.getFuncaoID()) //add param
+				.claim("role", user.getRole()) //add param
 				.issuedAt(now)
 				.expiresAt(now.plusSeconds(expiresIn))
 				.build();
 
 				var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-				return ResponseEntity.ok(new LoginResponse(jwtValue,expiresIn));
+				return ResponseEntity.ok(new LoginResponse(jwtValue,expiresIn,user.getRole()));
 	}
 
 

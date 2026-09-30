@@ -72,11 +72,7 @@ public class ConfigSec {
             )
             .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .formLogin(form -> form
-                .loginPage("/login")
-                .permitAll()
-            )
-            .logout(logout -> logout.permitAll());
+            .logout(logout -> logout.disable());
 
         return http.build();
     }
