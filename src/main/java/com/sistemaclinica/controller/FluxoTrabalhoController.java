@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class FluxoTrabalhoController {
 	FluxoTrabalhoService fluxoService;
 	
 	@GetMapping("/data")
+	//@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getFluxoTrabalho(
         @RequestHeader("X-Clinica-Key") String clinicaKey,
         @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data

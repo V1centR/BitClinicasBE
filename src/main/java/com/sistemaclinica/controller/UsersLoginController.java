@@ -54,7 +54,7 @@ public class UsersLoginController {
 
 				var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-				return ResponseEntity.ok(new LoginResponse(jwtValue,expiresIn,user.getRole()));
+				return ResponseEntity.ok(new LoginResponse(jwtValue,expiresIn,user.getRole(),user.getClinicaNome(),user.getNome(), user.getAvatar(),user.getEmail()));
 	}
 
 
