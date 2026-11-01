@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,8 +43,10 @@ public class UsersController {
 	
 	
 	@DeleteMapping("/usuariosclinica/{mailUser}")
-	public ResponseEntity<?> deleteUser(@RequestHeader("X-Clinica-Key") String clinicaKey, @PathVariable("mailUser") String mailUser) {
+	public ResponseEntity<?> deleteUser(@AuthenticationPrincipal Jwt jwt, @PathVariable("mailUser") String mailUser) {
 		
+		String clinicaKey = jwt.getClaimAsString("clinicaKey");
+
 		try {
 			userService.deleteUser(clinicaKey, mailUser);
 			return ResponseEntity.status(HttpStatus.OK).body(null);
@@ -55,7 +59,9 @@ public class UsersController {
 	
 	//PUT /api/agendamentos/hoje
 	@PutMapping("/updateuserdata")
-    public ResponseEntity<?> updateUser(@RequestHeader("X-Clinica-Key") String clinicaKey, @RequestBody NovoUsuarioRequest editRequest) {
+    public ResponseEntity<?> updateUser(@AuthenticationPrincipal Jwt jwt, @RequestBody NovoUsuarioRequest editRequest) {
+		
+		String clinicaKey = jwt.getClaimAsString("clinicaKey");
 		
 		Object dataSaved;
 		
@@ -83,8 +89,9 @@ public class UsersController {
 	
 	@PostMapping("/registerusuario")
 	//@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<?> registerUser(@RequestHeader("X-Clinica-Key") String clinicaKey, @RequestBody NovoUsuarioRequest  request) {
+	public ResponseEntity<?> registerUser(@AuthenticationPrincipal Jwt jwt, @RequestBody NovoUsuarioRequest  request) {
 		
+		String clinicaKey = jwt.getClaimAsString("clinicaKey");
 		Object dataSaved;
 		
 		try {

@@ -6,6 +6,8 @@ import java.time.ZoneId;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,8 +27,9 @@ public class AgendaMedicoController {
 
 
     @PostMapping("/setausencia")
-    public ResponseEntity<?> setAusenciaMedico(@RequestHeader("X-Clinica-Key") String clinicaKey, @RequestBody AusenciaMedicoRequest ausenciaMedicoRequest) {
+    public ResponseEntity<?> setAusenciaMedico(@AuthenticationPrincipal Jwt jwt, @RequestBody AusenciaMedicoRequest ausenciaMedicoRequest) {
 
+		String clinicaKey = jwt.getClaimAsString("clinicaKey");
         ausenciasMedicoService.setAusenciaMedico(ausenciaMedicoRequest, clinicaKey);
        
 
@@ -35,8 +38,9 @@ public class AgendaMedicoController {
     }
 
     @GetMapping("/ausenciasmedico")
-	public ResponseEntity<?> getAusenciasMedico(@RequestHeader("X-Clinica-Key") String clinicaKey, @RequestBody AusenciaMedicoRequest ausenciaMedicoRequest) {
+	public ResponseEntity<?> getAusenciasMedico(@AuthenticationPrincipal Jwt jwt, @RequestBody AusenciaMedicoRequest ausenciaMedicoRequest) {
 
+		String clinicaKey = jwt.getClaimAsString("clinicaKey");
 
         return null;
     }

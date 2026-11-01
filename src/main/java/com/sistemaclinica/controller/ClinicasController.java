@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,8 +34,10 @@ public class ClinicasController {
 		
 		//PUT /api/NxBYkLUPRVmTyZamR4wf
 		@PatchMapping("/updateclinicadata")
-	    public ResponseEntity<?> updateClinica(@RequestHeader("X-Clinica-Key") String clinicaKey, @RequestBody Map<String, Object> updateData) {
+	    public ResponseEntity<?> updateClinica(@AuthenticationPrincipal Jwt jwt, @RequestBody Map<String, Object> updateData) {
 			
+			String clinicaKey = jwt.getClaimAsString("clinicaKey");
+
 			try {
 		        clinicaService.updateClinica(clinicaKey, updateData);
 		        
@@ -55,7 +59,9 @@ public class ClinicasController {
 	
 		// /api/NxBYkLUPRVmTyZamR4wf
 		@GetMapping("/clinicadata")
-		public ResponseEntity<?> getClinicaByAccessKey(@RequestHeader("X-Clinica-Key") String clinicaKey) {
+		public ResponseEntity<?> getClinicaByAccessKey(@AuthenticationPrincipal Jwt jwt) {
+			
+			String clinicaKey = jwt.getClaimAsString("clinicaKey");
 			
 			try {
 				

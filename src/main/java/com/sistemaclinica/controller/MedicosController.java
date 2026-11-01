@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -45,7 +47,9 @@ public class MedicosController {
 	
 	// /api/MdzaDbr3YvCJv44fdf4/medicos
 	@GetMapping("medicos")
-	public ResponseEntity<?> getMedicosbyClinica(@RequestHeader("X-Clinica-Key") String clinicaKey) {
+	public ResponseEntity<?> getMedicosbyClinica(@AuthenticationPrincipal Jwt jwt) {
+		
+		String clinicaKey = jwt.getClaimAsString("clinicaKey");
 		
 		try {
             List<MedicoSelectsDTO> medicos = medicoService.getMedicosByClinica(clinicaKey);
@@ -68,8 +72,10 @@ public class MedicosController {
 
 	// /api/MdzaDbr3YvCJv44fdf4/medicosprofile/2026-06-14
 	@GetMapping("medicosprofile/{date}")
-	public ResponseEntity<?> getMedicosProfilebyClinica(@RequestHeader("X-Clinica-Key") String clinicaKey, @PathVariable("date") LocalDate date) {
+	public ResponseEntity<?> getMedicosProfilebyClinica(@AuthenticationPrincipal Jwt jwt, @PathVariable("date") LocalDate date) {
 		
+		String clinicaKey = jwt.getClaimAsString("clinicaKey");
+
 		try {
             List<MedicosProfileDTO> medicos = medicoService.getMedicosProfileByClinica(clinicaKey, date);
             

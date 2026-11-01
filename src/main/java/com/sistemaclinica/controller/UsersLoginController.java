@@ -48,6 +48,7 @@ public class UsersLoginController {
 				var claims = JwtClaimsSet.builder().issuer("BitClinicas SpecsBR 2027")
 				.subject(user.getEmail())
 				.claim("role", user.getRole()) //add param
+				.claim("clinicaKey", user.getClinicaKey())
 				.issuedAt(now)
 				.expiresAt(now.plusSeconds(expiresIn))
 				.build();

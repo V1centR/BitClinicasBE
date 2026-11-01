@@ -8,6 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +30,11 @@ public class FluxoTrabalhoController {
 	@GetMapping("/data")
 	//@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getFluxoTrabalho(
-        @RequestHeader("X-Clinica-Key") String clinicaKey,
+        @AuthenticationPrincipal Jwt jwt,
         @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data
         ) {
+        
+		String clinicaKey = jwt.getClaimAsString("clinicaKey");
         
         try {
             List<FluxoDeTrabalhoDTO> dataFluxo = fluxoService.getFluxoDeTrabalho(clinicaKey, data);
